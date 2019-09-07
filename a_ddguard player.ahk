@@ -403,43 +403,6 @@ return	;}
 RestauroAutomático:	;{
 if	(	A_UserName	=	"alberto"	or	A_UserName	=	"dsantos"		or	A_UserName	=	"llopes")
 	return
-if	(	ip4	=	171 or	ip4	=	175 or	ip4	=	178 or	ip4	=	163 or	ip4	=	167	)	{
-	timereset1			:=	(horareset1*60*60)+(minutoreset*60)+segundoreset
-	timereset2			:=	(horareset2*60*60)+(minutoreset*60)+segundoreset
-	timenow				:=	(A_Hour*60*60)+(A_Min*60)+A_Sec
-	time2reset1		:=	timereset1-((A_Hour*60*60)+(A_Min*60)+A_sec)
-	time2reset2		:=	timereset2-((A_Hour*60*60)+(A_Min*60)+A_sec)	;{
-	;~ if	(	time2reset1	=	60	)	{
-		;~ reseting	=	1
-		;~ SoundPlay, %repositorio%car.wav
-		;~ Gui, reset:+LastFound +AlwaysOnTop -Caption +ToolWindow 
-		;~ Gui, reset:Font, s15 ceef442
-		;~ Gui,	reset:Add,	Text,  % "x2	y5	w" A_ScreenWidth-2	"	h30  vttr Center +E0x08000000" ,	% "O Iris e o Dguard serão reiniciados em " time2reset1 " segundos, salve qualquer atendimento no IRIS em andamento e aguarde o sistema reiniciar. "
-		;~ Gui, reset:Color, 000000
-		;~ Gui, reset:Show, %	"x0  y0	w" A_ScreenWidth-2	" NoActivate"
-	;~ }
-	;~ if	(	time2reset2	=	60	)	{
-		;~ reseting	=	2
-		;~ Gui, reset:+LastFound +AlwaysOnTop -Caption +ToolWindow 
-		;~ Gui, reset:Font, s15 ceef442
-		;~ Gui,	reset:Add,	Text,  % "x2	y5	w" A_ScreenWidth-2	"	h30  vttr Center +E0x08000000" ,	% "O Iris e o Dguard serão reiniciados em " time2reset2 " segundos, salve qualquer atendimento no IRIS em andamento e aguarde o sistema reiniciar. "
-		;~ Gui, reset:Color, 000000
-		;~ Gui, reset:Show, %	"x0  y0	w" A_ScreenWidth-2	" NoActivate"
-	;~ }
-	;~ if	(	reseting			=	1		)
-		;~ GuiControl, reset:,  ttr,	% "O Iris e o Dguard serão reiniciados em " time2reset1 " segundos, salve qualquer atendimento no IRIS em andamento e aguarde o sistema reiniciar."
-	;~ else
-		;~ GuiControl, reset: ,  ttr,	% "O Iris e o Dguard serão reiniciados em " time2reset2 " segundos, salve qualquer atendimento no IRIS em andamento e aguarde o sistema reiniciar."	;}
-	if	(	time2reset1	between	3	and	0	OR time2reset2	between	3	and	0	)	{
-		Process,	Close,	Painel de Monitoramento.exe
-		Sleep 500
-		Run,	C:\Iris10\Painel de Monitoramento.exe
-		WinWaitActive,	ahk_exe Painel de Monitoramento.exe
-		SoundPlay, %repositorio%car.wav
-		WinActivate, ahk_exe Painel de Monitoramento.exe
-		MsgBox Necessário abrir o Iris.
-	}
-}
 if	(A_Hour	=	horareset1	&&	A_Min	=	minutoreset	&&	A_Sec	=	01	)	{
 	Gui,	reset:Destroy
 	gosub	RestauroDguard
@@ -472,17 +435,17 @@ RestauroDguard:			;{
 	Run,	cmd.exe /c "reg delete HKEY_CURRENT_USER\SOFTWARE\Seventh\DGuardCenter\ImageOSDWriter /f"
 	Run,	cmd.exe /c "reg delete HKCU\Seventh\DGuardCenter\ImageOSDWriter /f"
 	Sleep,	250
-	Run	cmd.exe /c "reg import %repositorio%registros\padrão\L.reg"
+	Run,	cmd.exe /c "reg import %repositorio%registros\padrão\L.reg"
 	
 	Run,	cmd.exe /c "reg delete HKEY_CURRENT_USER\Software\Seventh\DGuardCenter\SmtpClient /f"
 	Run,	cmd.exe /c "reg delete HKCU\Software\Seventh\DGuardCenter\SmtpClient /f"
 	Sleep,	250
-	Run	cmd.exe /c "reg import %repositorio%registros\padrão\smtp.reg"
+	Run,	cmd.exe /c "reg import %repositorio%registros\padrão\smtp.reg"
 
 	Run,	cmd.exe /c "reg delete HKEY_CURRENT_USER\Software\Seventh\DGuardCenter\Usuarios /f"
 	Run,	cmd.exe /c "reg delete HKCU\Software\Seventh\DGuardCenter\Usuarios /f"
 	Sleep,	250
-	Run	cmd.exe /c "reg import %repositorio%registros\padrão\U.reg"
+	Run,	cmd.exe /c "reg import %repositorio%registros\padrão\U.reg"
 
 	Sleep,	250
 	Run,	C:\Seventh\DGuardCenter\DGuard.exe
@@ -501,7 +464,7 @@ dia:								;{
 	Run,	cmd.exe /c "reg delete HKEY_CURRENT_USER\Software\Seventh\DGuardCenter /f"
 	Run,	cmd.exe /c "reg delete HKCU\Software\Seventh\DGuardCenter /f"
 	Sleep,	500
-	Run,	cmd.exe /c "reg import %repositorio%registros\Dia\A%A_IPAddress1%.reg"
+	Run,	cmd.exe /c "reg import %repositorio%registros\Dia\%A_IPAddress1%.reg"
 	
 	Sleep,	2000
 	Run,	cmd.exe /c "reg delete HKEY_CURRENT_USER\SOFTWARE\Seventh\DGuardCenter\ImageOSDWriter /f"
@@ -536,7 +499,7 @@ noite:							;{
 	Run,	cmd.exe /c "reg delete HKEY_CURRENT_USER\Software\Seventh\DGuardCenter /f"
 	Run,	cmd.exe /c "reg delete HKCU\Software\Seventh\DGuardCenter /f"
 	Sleep,	500
-	Run,	cmd.exe /c "reg import %repositorio%registros\Dia\A%A_IPAddress1%.reg"
+	Run,	cmd.exe /c "reg import %repositorio%registros\Noite\%A_IPAddress1%.reg"
 	
 	Sleep,	2000
 	Run,	cmd.exe /c "reg delete HKEY_CURRENT_USER\SOFTWARE\Seventh\DGuardCenter\ImageOSDWriter /f"
